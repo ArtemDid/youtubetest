@@ -22,28 +22,8 @@ const getCountHistory = async (query: string): Promise<number> => {
   return +count[0].count;
 };
 
-const getComments = async (
-  limit: number,
-  offset: number,
-): Promise<{ totalCount: number; comments: Array<ISearchDB> }> => {
-  const totalCount: number = ((await db('comments').clone().count('*', { as: 'count' }).first()) as { count: number })
-    .count;
-
-  const comments: Array<ISearchDB> = await db('comments')
-    .select(
-      'comments.id',
-      'comments.parent_id',
-      'comments.text',
-      'comments.created_at',
-      'comments.updated_at',
-      'users.user_name',
-      'users.email',
-    )
-    .innerJoin('users', 'users.id', 'comments.users_id')
-    .limit(limit)
-    .offset(offset);
-
-  return { totalCount, comments };
+const getHistory = async (): Promise<Array<IHistoryDB>> => {
+  return db.select('*').from('history').orderBy('created_at', 'desc').limit(10).returning('*');
 };
 
 export const youtubeRepository = {
@@ -52,4 +32,5 @@ export const youtubeRepository = {
   insertAnalytics,
   updateAnalytics,
   getCountHistory,
+  getHistory,
 };

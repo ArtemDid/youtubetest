@@ -5,7 +5,6 @@ import cors from 'cors';
 import { configureHealthCheckRouter } from '../common/routes/healthcheck.routes';
 import { errorHandlerMiddleware } from '../../common/middlewares/error.middleware';
 import { createYouTubeRouter } from './youtube/youtube.routes';
-// import { createUsersRouter } from './users/users.routes';
 
 export function buildApp(): express.Application {
   const app = express();
@@ -24,7 +23,6 @@ export function buildApp(): express.Application {
 function configureApiRoutes(): Router {
   const router = Router();
   router.use('/youtube', createYouTubeRouter());
-  // router.use('/users', createUsersRouter());
 
   return router;
 }

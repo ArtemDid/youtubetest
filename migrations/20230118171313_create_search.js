@@ -5,6 +5,7 @@ exports.up = function (knex) {
     table.text('title').notNullable();
     table.text('description');
     table.string('thumbnailUrl');
+    table.timestamp('published_at').notNullable();
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
   });

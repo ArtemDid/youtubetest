@@ -43,6 +43,16 @@ const getVideoYouTube = async (req: ExpressRequest, res: ExpressResponse) => {
   }
 };
 
+const getHistoryYouTube = async (req: ExpressRequest, res: ExpressResponse) => {
+  try {
+    const result = await youtubeRepository.getHistory();
+    return res.json({ history: result });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Internal server error');
+  }
+};
+
 const getSearchYouTube = async (req: ExpressRequest, res: ExpressResponse) => {
   const { q, pageToken, maxResults = 10 } = req.query;
 
@@ -62,6 +72,7 @@ const getSearchYouTube = async (req: ExpressRequest, res: ExpressResponse) => {
       title: item.snippet.title,
       description: item.snippet.description,
       thumbnailUrl: item.snippet.thumbnails.default.url,
+      published_at: item.snippet.publishedAt,
     }));
 
     await youtubeRepository.insertYouTube(results);
@@ -69,8 +80,6 @@ const getSearchYouTube = async (req: ExpressRequest, res: ExpressResponse) => {
     await youtubeRepository.insertHistory({ query: q.toString() });
 
     const count = await youtubeRepository.getCountHistory(q.toString());
-
-    console.log(count);
 
     count
       ? await youtubeRepository.updateAnalytics({ count: count + 1, query: q.toString() })
@@ -91,4 +100,5 @@ const getSearchYouTube = async (req: ExpressRequest, res: ExpressResponse) => {
 export const YoutubeController = {
   getVideoYouTube,
   getSearchYouTube,
+  getHistoryYouTube,
 };

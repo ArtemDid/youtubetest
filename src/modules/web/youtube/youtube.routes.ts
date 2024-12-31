@@ -7,5 +7,6 @@ export const createYouTubeRouter = () => {
   const router = Router();
   router.get('/video/:id', YoutubeController.getVideoYouTube);
   router.get('/search', validateSchema(youTubeSchema), YoutubeController.getSearchYouTube);
+  router.get('/history', YoutubeController.getHistoryYouTube);
   return router;
 };
